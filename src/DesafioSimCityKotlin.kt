@@ -1,72 +1,83 @@
 import kotlin.system.exitProcess
 
+
 fun main() {
-    menu()
+    boasVindas()
+    do {
+
+        val notas1 = notasAlunos()
+        val resultado = mediaAlunos(notas1)
+        mostrarMenu(resultado)
+    } while (true)
+}
+
+fun boasVindas() {
+    println("|--*--*  Bem vindo ao sistema escolar de SymCity *--*--|")
+    println("|--------------Inserir notas do aluno:-----------------|")
+    println("|------------------------------------------------------|")
 }
 
 fun menu() {
-
-    do {
-
-        println("|--*--*--Bem vindo ao sistema escolar de SymCity *--*--|")
-        println("|        Por favor, digite a opção desejada:           |")
-        println("|------------------------------------------------------|")
-        println("|--------------01 - Inserir notas do aluno:------------|")
-        println("|--------------02 - Sair ------------------------------|")
-        println("|------------------------------------------------------|")
-        val opcao = readln().toInt()
-
-        mostrarResultadosMenu(opcao)
-    } while (true)
+    println("|--*--*  Bem vindo ao sistema escolar de SymCity *--*--|")
+    println("|        Por favor, digite a opção desejada:           |")
+    println("|------------------------------------------------------|")
+    println("|--------------01 - Inserir notas do aluno:------------|")
+    println("|--------------02 - Mostrar média do aluno: -----------|")
+    println("|--------------03 - Sair ------------------------------|")
+    println("|------------------------------------------------------|")
 
 }
 
-fun notasAlunos() {
+fun notasAlunos(): DoubleArray {
+
     val notas = DoubleArray(4)
     notas.forEachIndexed { i, _ ->
-        println("Informe a ${(i + 1)}ª nota do Aluno:")
-        notas[i] = readln().toDouble()
-
-        validarNotas(notas)
+        notas[i] = validarNotas(i)
     }
 
-    println("A média semestral do aluno é = ${(mediaAlunos(notas))}")
-
+    return notas
 }
 
-fun validarNotas(notas: DoubleArray) {
+    fun validarNotas(i: Int): Double {
+        println("Informe a ${(i + 1)}ª nota do Aluno:")
+        var nota = readln().toDouble()
 
-    notas.forEachIndexed { i, _ ->
 
-        if (notas[i] !in -0.0..10.0) {
+        while (nota !in 0.0..10.0) {
             println("Nota inválida. Digite novamente")
             println("Informe a ${(i + 1)} nota do Aluno:")
-            notas[i] = readln().toDouble()
+            nota = readln().toDouble()
         }
+        return nota
     }
-}
 
-fun mediaAlunos(notas: DoubleArray): Double {
+fun mediaAlunos(notas: DoubleArray): String {
     var soma = 0.0
-
     notas.forEachIndexed { i, _ ->
-        if (notas[i] in 0.0..10.0) {
-            soma += notas[i]
+        soma += notas[i]
 
-        }
     }
-    return soma / notas.size
+    println(" A média do Aluno é ${soma / notas.size}")
+    return " A média do Aluno é ${soma / notas.size}"
 }
 
-fun mostrarResultadosMenu(opcao: Int) {
 
-    when (opcao) {
-        1 -> println(notasAlunos())
+fun mostrarMenu(resultado: String) {
+    menu()
+    when (readln().toInt()) {
+        1 -> println("Novo calculo: ")
         2 -> {
-            println("Obrigada por usar nosso sistema :D")
+            println(resultado)
+            mostrarMenu(resultado)
+        }
+        3 -> { println("Obrigada por usar nosso sistema :D")
             exitProcess(0)
         }
-        else -> println("Opção inválida")
+
+        else -> {
+            println("Opção inválida")
+            mostrarMenu(resultado)
+        }
     }
 }
 
